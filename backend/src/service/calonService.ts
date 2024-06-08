@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+import { ICalon } from '../../type/calon';
 
 const prisma = new PrismaClient();
 
@@ -20,7 +21,7 @@ class CalonService {
 
     }
 
-    async createCalon(calonData: any) {
+    async createCalon(calonData: ICalon){
         try {
             return await prisma.tb_calon.create({ data: calonData });
         } catch (error) {
@@ -28,7 +29,7 @@ class CalonService {
         }
     }
 
-    async updateCalon(id: number, calonData: any) {
+    async updateCalon(id: number, calonData: ICalon) {
         try {
             return await prisma.tb_calon.update({ where: { id_calon:id }, data: calonData });
         } catch (error) {

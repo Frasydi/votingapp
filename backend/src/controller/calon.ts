@@ -1,5 +1,7 @@
 import { Context } from "hono";
 import {calonService} from "../service/calonService";
+import { z } from "zod";
+import { ICalon, ZCalon } from "../../type/calon";
 
 export const getAllCalon = async (c: Context) => {
   try {
@@ -13,6 +15,12 @@ export const getAllCalon = async (c: Context) => {
 export const getCalonById = async (c: Context) => {
   try {
     const id = parseInt(c.req.param("id"));
+    if(z.number().safeParse(id).success == false) {
+      return c.json({
+        message : "Invalid Param",
+        status : 400
+      }, 400)
+    }
     const calon = await calonService.getCalonById(id);
     if (!calon) {
       return c.json({ message: "Calon not found" }, 404);
@@ -25,7 +33,15 @@ export const getCalonById = async (c: Context) => {
 
 export const createCalon = async (c: Context) => {
   try {
-    const calonData = await c.req.json();
+    const calonData : ICalon = await c.req.json();
+    const validation = ZCalon.safeParse(calonData) 
+    if(validation.success == false) {
+      return c.json({
+        message : validation.error.message,
+        status : 400
+      }, 400)
+    }
+
     const calon = await calonService.createCalon(calonData);
     return c.json(calon, 201);
   } catch (error) {

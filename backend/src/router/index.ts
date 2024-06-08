@@ -8,5 +8,6 @@ apiRouter.get('/calon/:id', getCalonById);
 apiRouter.post('/calon', createCalon);
 apiRouter.put('/calon/:id', updateCalon);
 apiRouter.delete('/calon/:id', deleteCalon);
+apiRouter.put("/suara")
 
 export { apiRouter };

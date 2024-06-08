@@ -20,5 +20,6 @@ model tb_suara {
   id_calon         Int?   
   waktu_pemungutan DateTime? @db.Timestamp(0) @default(now())
   calon            tb_calon? @relation(fields: [id_calon], references: [id_calon])
+  device_id String 
 }
 

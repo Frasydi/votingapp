@@ -1,7 +1,7 @@
 import { useEffect } from "react"
 import style from "./indes.module.css"
 export default function Home() {
-
+    
     async function fetching() {
         const feting = await fetch("/api")
         console.log(feting.status)
@@ -15,7 +15,14 @@ export default function Home() {
 
     return(
         <div className={style.container}>
-            Test
+            <div >
+                <h2>Pemilihan Ketua Organisasi IPM</h2>
+            </div>
+            <div>
+                <div>
+                    
+                </div>
+            </div>
         </div>
     )
 }

@@ -1,18 +1,21 @@
 import { serve } from '@hono/node-server'
 import { Hono } from 'hono'
 import { logger } from 'hono/logger'
-import { apiRouter } from './router/index';
+import apiRouter from "./router/index";
 import { PrismaClient } from '@prisma/client';
+import { prettyJSON } from 'hono/pretty-json';
 
 
 const prisma = new PrismaClient();
 const app = new Hono();
 
 app.use(logger());
+app.use(prettyJSON())
 
 app.get('/api', (c) => {
   return c.text('Hello Hono!')
 })
+app.notFound((c) => c.json({ message: 'Not Found', ok: false }, 404))
 
 
 app.use('*', async (c, next) => {

@@ -1,8 +1,10 @@
 import { Hono } from "hono";
-import { getHome } from "../controller/index";
+import calon from "../controller/calon";
+import suara from "../controller/suara";
 
-const apiRouter = new Hono();
+const app = new Hono()
 
-apiRouter.get('/', getHome);
+app.route('/calon', calon)
+app.route('/suara',suara)
 
-export { apiRouter };
+export default app

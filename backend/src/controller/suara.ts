@@ -9,3 +9,23 @@ export const getRekap = async (c: Context) => {
     return c.json({ message: error }, 500);
   }
 };
+
+export const addSuara = async (c: Context) => {
+  try {
+    const id_calon = parseInt(c.req.param("id"));
+    const suara = await suaraService.addSuara(id_calon);
+    return c.json(suara, 201);
+  } catch (error) {
+    return c.json({ message: error }, 500);
+  }
+};
+
+export const deleteSuara = async (c: Context) => {
+  try {
+    const id_calon = parseInt(c.req.param("id"));
+    await suaraService.deleteSuara(id_calon);
+    return c.json({ message: "Suara deleted successfully" });
+  } catch (error) {
+    return c.json({ message: error }, 500);
+  }
+};

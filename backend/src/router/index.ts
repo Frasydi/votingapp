@@ -1,6 +1,6 @@
 import { Hono } from "hono";
 import { getAllCalon, getCalonById, createCalon, updateCalon, deleteCalon } from "../controller/calon";
-import { getRekap } from "../controller/suara";
+import { getRekap, addSuara,deleteSuara} from "../controller/suara";
 
 const apiRouter = new Hono();
 
@@ -12,6 +12,8 @@ apiRouter.delete('/calon/:id', deleteCalon);
 
 //suara
 apiRouter.get('/rekap', getRekap);
+apiRouter.post('/suara/:id', addSuara);
+apiRouter.delete('/suara/:id', deleteSuara);
 
 
 export { apiRouter };

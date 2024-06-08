@@ -1,9 +1,11 @@
-import { Hono } from "hono";
+import { Context } from "hono";
+import {suaraService} from "../service/suaraService";
 
-const app = new Hono();
-
-app.get('/',(c) => c.json("list suara"))
-app.post('/',(c) => c.json("create suara",201))
-app.get('/:id',(c) => c.json(`get ${c.req.param('id')}`))
-
-export default app
+export const getRekap = async (c: Context) => {
+  try {
+    const rekap = await suaraService.getRekap();
+    return c.json(rekap);
+  } catch (error) {
+    return c.json({ message: error }, 500);
+  }
+};

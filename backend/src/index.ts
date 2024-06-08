@@ -14,13 +14,6 @@ app.get('/api', (c) => {
   return c.text('Hello Hono!')
 })
 
-// app.use('*', async (c, next) => {
-//   if (c.req.method === 'POST' || c.req.method === 'PUT') {
-//     c.req.parsedBody = await c.req.parseBody();
-//   }
-//   await next();
-// });
-
 
 app.use('*', async (c, next) => {
   c.res.headers.set('Access-Control-Allow-Origin', '*');
@@ -37,7 +30,7 @@ app.route('/api', apiRouter);
     await prisma.$connect();
     console.log('Database connected successfully');
 
-    app.get('/', (c) => c.json({ message: "backend trustBuy by Syamsul Alam" }));
+    app.get('/', (c) => c.json({ message: "backend EVoting by Syamsul Alam" }));
 
     serve({
       fetch: app.fetch,

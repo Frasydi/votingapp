@@ -50,6 +50,23 @@ class SuaraService {
             throw new Error(`Error deleting suara: ${error}`);
         }
     }
+
+    async addMultipleSuara(id_calon_list: number[]) {
+        const transaction = id_calon_list.map(id_calon =>
+            prisma.tb_suara.create({
+                data: {
+                    id_calon,
+                },
+            })
+        );
+
+        try {
+            const result = await prisma.$transaction(transaction);
+            return result;
+        } catch (error) {
+            throw new Error(`Error adding multiple suara: ${error}`);
+        }
+    }
 }
 
 export const suaraService = new SuaraService();

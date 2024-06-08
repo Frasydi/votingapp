@@ -29,3 +29,13 @@ export const deleteSuara = async (c: Context) => {
     return c.json({ message: error }, 500);
   }
 };
+
+export const addMultipleSuaraController = async (c: Context) => {
+    try {
+      const { id_calon_list } = await c.req.json();
+      const suara = await suaraService.addMultipleSuara(id_calon_list);
+      return c.json(suara, 201);
+    } catch (error) {
+      return c.json({ message: error }, 500);
+    }
+  };

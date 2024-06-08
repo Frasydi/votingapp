@@ -1,10 +1,12 @@
 import { Hono } from "hono";
-import calon from "../controller/calon";
-import suara from "../controller/suara";
+import { getAllCalon, getCalonById, createCalon, updateCalon, deleteCalon } from "../controller/calon";
 
-const app = new Hono()
+const apiRouter = new Hono();
 
-app.route('/calon', calon)
-app.route('/suara',suara)
+apiRouter.get('/calon', getAllCalon);
+apiRouter.get('/calon/:id', getCalonById);
+apiRouter.post('/calon', createCalon);
+apiRouter.put('/calon/:id', updateCalon);
+apiRouter.delete('/calon/:id', deleteCalon);
 
-export default app
+export { apiRouter };

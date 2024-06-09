@@ -6,7 +6,11 @@ import { ICalon, ZCalon } from "../../type/calon";
 export const getAllCalon = async (c: Context) => {
   try {
     const calon = await calonService.getAllCalon();
-    return c.json(calon);
+    return c.json({
+      text : "Berhasil mendapatkan informasi calon",
+      status : 200,
+      data : calon
+    });
   } catch (error) {
     return c.json({ message: error }, 500);
   }

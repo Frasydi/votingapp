@@ -1,47 +1,19 @@
-import { tb_suara } from './../../node_modules/.prisma/client/index.d';
-import { PrismaClient } from '@prisma/client';
+import { ISuaraInput } from '../../type/suara';
+import { Prisma, PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
 class SuaraService {
-    async addSuara(id : number, device_id : string) {
+    async addSuara(data : ISuaraInput) {
         try {
-            const getConstraintDeviceId = await prisma.tb_suara.findFirst({
-                where : {
-                    device_id : device_id
-                },
-                select : {
-                id_suara : true
-                }
-            })
-            if(getConstraintDeviceId) {
-                return {
-                    message : "Device ID sudah terdaftar",
-                    status : 400,
-    
-                }
-            }
-            const datas = await prisma.tb_suara.findFirst({
-                where : {
-                    id_calon : id
-                },
-            })
-            if(datas == null) {
-                return {
-                    message :"Tidak Menemukan Id Calon",
-                    status : 404
-                }
-            }
-            await prisma.tb_suara.create({
-                data : {
-                    device_id : device_id,
-                    calon : {
-                        connect : {
-                            id_calon : id
-                        }
-                    },
-                    waktu_pemungutan : new Date()
-                }
+           
+            const newData : Prisma.tb_suaraCreateManyInput[] = data.id_calon.map(el => ({
+                device_id : data.device_id,
+                id_calon : el
+                
+            }))
+            await prisma.tb_suara.createMany({
+                data : newData
             })
             return {
                 message : "Suara Berhasil Ditambahkan",
@@ -50,7 +22,7 @@ class SuaraService {
         }catch(err) {
             console.log(err)
             return {
-                message : "Internal Server Error",
+                message : "Anda Sudah Memvoting",
                 status : 500
             }
         }

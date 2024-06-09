@@ -6,7 +6,11 @@ const prisma = new PrismaClient();
 class CalonService {
     async getAllCalon() {
         try {
-            return await prisma.tb_calon.findMany();
+            return await prisma.tb_calon.findMany({
+                orderBy : {
+                    nomor_urut : "asc"
+                }
+            });
         } catch (error) {
             throw new Error(`Error fetching calon: ${error}`);
         }

@@ -22,3 +22,12 @@ export const tambahSuara = async (c: Context) => {
       return c.json({ message: error }, 500);
     }
   };
+
+  export const rekapSuara = async(c : Context) => {
+    const result = await suaraService.rekapSuara()
+    return c.json(result, result.status as StatusCode)
+  } 
+  export const rekapSuara2 = async(c : Context) => {
+    const result = await suaraService.rekapSuara2()
+    return c.json(result, result.status as StatusCode)
+  } 

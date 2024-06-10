@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import style from "./indes.module.css";
 import useFetch from "../../hooks/useFetch";
 export default function Home() {
@@ -10,54 +10,55 @@ export default function Home() {
     }[]
   >("/api/calon");
 
-  useEffect(() => {
-    if(localStorage.getItem("deviceID") != null) return
-    const userAgent = window.navigator.userAgent;
-    const platform = window.navigator.platform;
-    const randomString =
-      Math.random().toString(20).substring(2, 14) +
-      Math.random().toString(20).substring(2, 14);
-
-    const deviceID = `${userAgent}-${platform}-${randomString}`;
-    localStorage.setItem('deviceID', deviceID);
-  }, []);
-
+  const [isVoting, setIsVoting] = useState(false)
   const [voting, setVoting] = useState<number[]>([])
-
   async function votingData() {
     try {
       const feting = await fetch("/api/suara", {
-        method :"put",
-        body : JSON.stringify({
-          device_id : localStorage.getItem('deviceID'),
-          id_calon : voting
+        method: "put",
+        body: JSON.stringify({
+          id_calon: voting
         })
       })
       const json = await feting.json()
-      if(feting.status >= 400) {
+      if (feting.status >= 400) {
         alert(json.message)
         return
       }
 
-      alert("Anda telah berhasil memvote")
+      setIsVoting(true)
 
-      localStorage.setItem("isVote", "true")
 
-    }catch(err) {
+    } catch (err) {
       console.log(err)
       alert("Terdapat Masalah dari server")
     }
   }
 
+  useEffect(() => {
+
+
+  }, []);
+
   return (
     <div className={style.container}>
-      <div>
-        <h2>Pemilihan Ketua Organisasi IPM</h2>
-        {
-          localStorage.getItems("is_voting") != null && 
-        <h2>Terima Kasih Sudah Memilih Calon Ketua Organisasi IPM</h2>
-        }
-      </div>
+      {
+        isVoting ?
+          <div style={{
+            display :"flex",
+            justifyContent :"center",
+            alignItems :"center",
+            flex : 1,
+            minHeight : "100vh"
+          }}>
+            <h1>TERIMA KASIH VOTING ANDA TELAH DIREKAM</h1>
+          </div>
+          : 
+          <>
+          <div className={style.headers}>
+            <h2>Pemilihan Formatur Organisasi IPM</h2>
+
+          </div>
       {loading ? (
         <h1
           style={{
@@ -70,9 +71,18 @@ export default function Home() {
         <div className={style.data}>
           {data.map((el) => (
             <div>
-              <h4>{el.nama_calon}</h4>
-              <button className={voting.includes(el.id_calon) && style.selected} disabled={voting.length >= 9 || localStorage.getItem("is_voting" ) != null} onClick={() => {
-                if(voting.includes(el.id_calon)) {
+              <img src="/profil.png" style={{
+                borderRadius: "100%",
+                marginTop: 20
+              }} />
+              <h4 style={{
+                textAlign: "center"
+              }}>{el.nama_calon}</h4>
+              <h2 style={{
+                textAlign: "center"
+              }}>{el.nomor_urut}</h2>
+              <button className={voting.includes(el.id_calon) && style.selected} disabled={voting.length >= 9} onClick={() => {
+                if (voting.includes(el.id_calon)) {
                   const newvot = voting.filter(el2 => el2 != el.id_calon)
                   setVoting([...newvot])
                   return
@@ -83,14 +93,17 @@ export default function Home() {
           ))}
         </div>
       )}
-      
-        <div className={style.apply} >
-          <button disabled={voting.length < 9} onClick={() => {
-            votingData()
-          }} >Kirim Suara</button>
-        </div>
 
-      
+      <div className={style.apply} >
+        <button disabled={voting.length < 9} onClick={() => {
+          votingData()
+        }} >Kirim Suara</button>
+      </div>
+      </>
+
+      }
+
+
     </div>
   );
 }
